@@ -472,6 +472,8 @@ def parseFile(filename,macrotable,outputcode):
 file="input"
 if len(sys.argv) > 1:
     file = sys.argv[1]
+    if ".tst" in os.path.basename(file):
+        file = os.path.splitext(file)[0]
 ifilename = file+".masm"
 ofilename = file+".pasm"
 hfilename = file+".hack"
@@ -506,4 +508,13 @@ if len(outputcode.statics)>0:
     print("static variables identified=",outputcode.statics) 
 print(outputcode.symbolTable)
 
-        
+## In-Python CPUEmulator run
+print("\n\nRunning CPUEmulator...")
+
+scriptExt = {True: '.bat', False: '.sh'} [os.name == 'nt']
+
+cpu_emulator_path = os.path.join(os.path.split(os.path.abspath(__file__))[0], "CPUEmulator" + scriptExt)
+
+tstFile = file + ".tst"
+
+os.system(cpu_emulator_path + " " + tstFile)
