@@ -1,3 +1,6 @@
 #!/usr/bin/env sh
 
-python ./tools/macroAssembler.py ./projects/07/Multiplication/MultiplicationTest
+rm ./projects/08/Multiplication/MultiplicationTest.hack
+rm ./projects/08/Multiplication/MultiplicationTest.out
+
+python ./tools/macroAssembler.py ./projects/08/Multiplication/MultiplicationTest

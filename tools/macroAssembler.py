@@ -3,6 +3,7 @@
 # macro assembler for hack assembly language
 ## Minor edits by Kyler Smith in March of 2025
 ## contact: kylerssmith@hotmail.com
+import os
 import sys
 linecounter=0
 parseFileName = ""
@@ -14,7 +15,7 @@ parseError = False
 class lineType:
     def __init__(self,line):
         # classify line of assembly code
-        linesplit1 = line.split()
+        linesplit1 = line.split() # note: automatically removes leading and trailing whitespace
         # remove comments from line
         linesplit = []
         for i in linesplit1:
@@ -66,7 +67,13 @@ class lineType:
                 self.data=linesplit[0][1:]
             else: # If nothing else then must be C instruction
                 self.cmdtype="ctype" 
-                self.data=linesplit[0]
+                # self.data=linesplit[0]
+                # instead of taking the first sequence only, take the whole line, stripped and replaced:
+                self.data=line.strip().replace(" ","")
+                # remove in-line comments
+                if "//" in self.data:
+                    self.data=self.data[:self.data.index("//")]
+                
 
 # Save information about macro definition
 class macroInfo:
@@ -387,6 +394,7 @@ def parseFile(filename,macrotable,outputcode):
     linecountList.append(linecounter)
     parseFileList.append(parseFileName)
     parseFileName = filename
+    parseFileDir = os.path.dirname(filename)
     linecounter=0
     global macrocounter
     infile = open(filename,'r')
@@ -441,7 +449,11 @@ def parseFile(filename,macrotable,outputcode):
                     parseError = True 
                     outputcode.insertAInstruction("FAILEDMACRO")
             elif decode.cmdtype == "include":
-                parseFile(decode.data,macrotable,outputcode)
+                try:
+                    parseFile(decode.data,macrotable,outputcode)
+                except FileNotFoundError:
+                    # parse the file but with the proper pathing performed
+                    parseFile(os.path.join(parseFileDir, decode.data),macrotable,outputcode)
             elif decode.cmdtype == "atype":
                 outputcode.insertAInstruction(decode.data)
             elif decode.cmdtype == "ctype":
