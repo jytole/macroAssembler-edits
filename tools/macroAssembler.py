@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # macroAssembler.py
 # macro assembler for hack assembly language
+## Minor edits by Kyler Smith in March of 2025
+## contact: kylerssmith@hotmail.com
 import sys
 linecounter=0
 parseFileName = ""
@@ -17,7 +19,7 @@ class lineType:
         linesplit = []
         for i in linesplit1:
             if len(i)>=2 and i[0]=='/' and i[1] =='/':
-                break ;
+                break
             linesplit.append(i)
             
         #split line by space delimiter
@@ -119,7 +121,7 @@ def sixteenBitString(val):
     for j in range(15,-1,-1):
         if val >= cnt:
             bits=bits+'1'
-            val =  val - cnt ;
+            val =  val - cnt
         else:
             bits=bits+'0'
         cnt = cnt/2
@@ -277,7 +279,7 @@ class assemblyCode:
     def insertSymbolAssign(self,symbol,val):
         global parseError
         modifier = "=" + symbol + " " + str(val)
-        self.code.append(modifier) ;
+        self.code.append(modifier)
         if symbol in self.symbolTable:
             print("repeated definition of symble ", symbol, "on line", linecounter,"in file", parseFileName)
             parseError = True
@@ -311,7 +313,7 @@ class assemblyCode:
                         Aval = self.symbolTable[data]
                     else:
                         if len(data)>0 and data[0] == '-':
-                            print("invalid symbol, ", data) ;
+                            print("invalid symbol, ", data)
                         Aval = varbase
                         varbase = varbase+1
                         self.statics.append(data)
@@ -336,7 +338,7 @@ def instantiateMacro(macroname,instance,arglist):
     instancename = macroname + str(instance)
     localsymbols = dict()
     localsymbols[macroname] = instancename
-    marglist = macrotable[macroname].arguments ;
+    marglist = macrotable[macroname].arguments
     if len(marglist) != len(arglist)-1:
         print("ERROR: macro ", macroname, " incorrect number of arguments!, line:",linecounter,"file:",parseFileName)
         parseError=True
@@ -357,7 +359,7 @@ def instantiateMacro(macroname,instance,arglist):
             else:
                 outputcode.insertAInstruction(i.data)
         elif i.cmdtype == "ctype":
-            outputcode.insertCInstruction(i.data) ;
+            outputcode.insertCInstruction(i.data)
         elif i.cmdtype == "symbol":
             if i.data in localsymbols:
                 outputcode.insertSymbol(localsymbols[i.data])
@@ -406,7 +408,7 @@ def parseFile(filename,macrotable,outputcode):
                 instructions=[]
                 symbols=set()
                 while b:
-                    linein = infile.readline() ;
+                    linein = infile.readline()
                     linecounter=linecounter+1
                     if not linein:
                         b=False
