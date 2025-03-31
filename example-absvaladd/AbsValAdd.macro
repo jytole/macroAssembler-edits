@@ -1,0 +1,61 @@
+(ABSVALADD)
+    //short absvaladd(short x, short y) {
+
+    // push Frame with 2 args and 1 local
+    // Note that 2 locals may also be used
+    $pushFrame 2 1
+    
+    // define args
+    =ABSVALADD.x 0 // index 0 in args
+    =ABSVALADD.y 1 // index 1 in args
+
+    // define locals
+    =ABSVALADD.result 0 // index 0 in loc
+
+    //////////////////////////////
+    //        Add x + y         //
+    //////////////////////////////
+    // Push arg1, x
+    $getArgument ABSVALADD.x
+    $pushD
+
+    // Push arg2, y
+    $getArgument ABSVALADD.y
+    $pushD
+
+    // Perform the addition
+    $add
+    // Pop the result off the stack and store in D
+    $popAD
+    // Store x + y (currently D) in ABSVALADD.result
+    $setLocal ABSVALADD.result
+
+    //////////////////////////////
+    // Negate if result is neg  //
+    //////////////////////////////
+    // Negate result if it is negative
+    // D is still result
+    @ABSVALADD.negate
+    D;JLT
+
+    // otherwise, return result
+    @ABSVALADD.end
+    0;JMP
+
+    (ABSVALADD.negate)
+    // here, D is still ABSVALADD.result
+    D=-D
+    $setLocal ABSVALADD.result
+
+    (ABSVALADD.end)
+    // Store result in D
+    $getLocal ABSVALADD.result
+
+    // Set args[0] to D
+    $setArgument 0
+
+    // Pop Frame with 1 args and 1 local
+    $popFrame 2 1
+
+    $return
+//}
