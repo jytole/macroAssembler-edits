@@ -1,5 +1,7 @@
 # macroAssembler-edits
-Edits to the Macro Assembler for Comp Org
+Edits to the Macro Assembler for the Computer Organization course at Mississippi State University
+
+This project has been completed and merged into the main branch of https://codeberg.org/8bitZeta/Course-CompOrg/src/branch/main. This project has thus been archived.
 
 ## Added Capabilities
 
